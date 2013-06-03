@@ -1,0 +1,144 @@
+#include <iostream>
+#include <string>
+#include <conio.h>
+
+using namespace std;
+
+class Queue
+{
+private:
+        int * ptr;
+        int proportions;
+        int lgth;
+        int first;
+        int last;
+public:
+        Queue():lgth(0), first(0), last(-1)
+{
+        cout<<"Ââåäèòå ðàçìåð î÷åðåäè:";
+        cin>>proportions;
+        while (proportions<=0)
+        {
+                cout<<"\nÍåâåðíûé ðàçìåð î÷åðåäè\n"<<endl;
+                cout<<"Ââåäèòå ðàçìåð î÷åðåäè:";
+                cin>>proportions;
+        }
+        ptr=new int [proportions];
+}
+bool not_full()
+{
+        if (lgth<proportions) 
+                return true;
+        else
+                return false;
+}
+bool not_empty()
+{
+        if (lgth>0)
+                return true;
+        else
+                return false;
+}
+void input()
+{
+        if(not_full())
+        {
+                int number;
+                cout<<"\nÂâåäèòå ÷èñëî: ";
+                cin>>number;
+                last=(last+1)%proportions;
+                ptr[last]=number;
+                lgth++;
+                cout<<endl;
+        }
+        else
+                cout<<"\nÎ÷åðåäü ïîëíà\n"<<endl;
+}
+void Take()
+{
+        if (not_empty())
+        {
+                cout<<"\nÓäàëåííûé ýëåìåíò: "<<ptr[first]<<endl<<endl;
+                first=(first+1)%proportions;
+                lgth--;
+        }
+        else
+                cout<<"\nÎ÷åðåäü ïóñòà\n"<<endl;
+}
+void out()
+{
+        if (not_empty())
+        {
+                int numberber=0;
+                cout<<"\nÂâåäèòå íîìåð ýëåìåíòà:";
+                cin>>numberber;
+                while (!((0<numberber)&&(numberber<=lgth)))
+                {
+                        cout<<
+                                "\nÍîìåð ýëåìåíòà äîëæåí áûòü áîëüøå íóëÿ"
+                                "è íå âûõîäèòü çà ïðåäåëû î÷åðåäè\n"
+                                    <<endl;
+                        cout<<"Ââåäèòå íîìåð ýëåìåíòà:";
+                        cin>>numberber;
+                }
+                cout<<endl<<ptr[(first+numberber-1)%proportions]<<endl<<endl;
+        }
+        else
+                cout<<"\nÎ÷åðåäü ïóñòà\n"<<endl;
+}
+~Queue()
+{
+        delete [] ptr;
+}
+};
+
+
+char message()
+{
+        char * mes="Âûðåáèòå äåéñòâèå:\n"
+                "1)Äîáàâèòü ýëåìåíò\n"
+                "2)Óäàëèòü ýëåìåíò\n"
+                "3)Âûâåñòè i-é ýëåìåíò\n"
+                "4)Âûéòè\n";
+        cout<<mes;
+        char message;
+        cin.clear();
+        message=getch();
+        system("CLS");
+        return message;
+}
+void main()
+{
+        setlocale(LC_ALL, "Russian");
+        system("title Î÷åðåäü");
+        Queue First;
+        char off=1;
+        while(off)
+        {
+                switch(message())
+                {
+                case '1':
+                        {
+                                First.input();
+                                break;
+                        }
+                case '2':
+                        {
+                                First.Take();
+                                break;
+                        }
+                case '3':
+                        {
+                                First.out();
+                        }
+                        break;
+                case '4':
+                        off=0;
+                        break;
+                default:
+                        cout<<"\nÍåâåðíûé ââîä. Ïîâòîðèòå ââîä.\n\n";
+                        break;
+                }
+        }
+        system("pause");
+}
