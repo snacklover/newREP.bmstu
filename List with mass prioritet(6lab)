@@ -1,0 +1,98 @@
+#include <conio.h>
+#include <iostream.h>
+#include <stdlib.h>
+#define N 10
+ 
+struct PQType {
+  int priority[N];
+  int front;
+  int rear;
+  int size;
+};
+ 
+PQType pqueue;
+ 
+void Init()
+{
+   for (int i = 0; i < N; pqueue.priority[i++] = 0);
+   pqueue.front = 0;
+   pqueue.rear = 0;
+   pqueue.size = 0;
+}
+ 
+int CheckBounds(int index)
+{
+   if (index < 0) return N - 1;
+   else if (index > N - 1) return 0;
+   else return index;
+}
+ 
+void Insert(int data)
+{
+   int loc, prev;
+   int found;
+ 
+   if (pqueue.size == N) {
+     clrscr(); cout << "Oshibka pri vizove Insert() - ochered` zapolnena!";
+   }
+   else {
+     pqueue.size++;
+     if (pqueue.size == 1) {
+       pqueue.front = pqueue.rear;
+       pqueue.priority[pqueue.rear] = data;
+     }
+     else {
+       pqueue.rear++;
+       pqueue.rear = CheckBounds(pqueue.rear);
+       found = 0; loc = pqueue.rear;
+       do {
+     prev = loc - 1;
+     prev = CheckBounds(prev);
+     if (data < pqueue.priority[prev]) {
+       pqueue.priority[loc] = pqueue.priority[prev];
+       loc = prev;
+     }
+     else found = 1;
+       } while (found != 1 && (loc != pqueue.front));
+       pqueue.priority[loc] = data;
+     }
+   }
+}
+ 
+void DeleteMin()
+{
+  if (!pqueue.size) {
+     clrscr(); cout << "Oshibka pri vizove DeleteMin() - ochered` pustaya!";
+  }
+  else {
+    //data = pqueue.priority[pqueue.front];
+    pqueue.front++;
+    pqueue.front = CheckBounds(pqueue.front);
+    pqueue.size--;
+  }
+}
+ 
+int main()
+{
+   int data, i;
+   char key;
+ 
+   Init();
+   do {
+     clrscr();
+     cout << "1 - Insert  2 - Delete  0 - Exit\n\n";
+     for (i = 0; i < pqueue.size; i++)
+       cout << pqueue.priority[i] << " ";
+     key = getch();
+     if (key == '1') {
+       clrscr(); cout << "Noviy prioritet: ";
+       cin >> data;
+       Insert(data);
+     }
+     else if (key == '2') {
+       DeleteMin();
+     }
+   } while (key != '0');
+ 
+   return 0;
+}
